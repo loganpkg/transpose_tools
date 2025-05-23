@@ -20,10 +20,11 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 Transpose Tools
 ===============
 
-Transpose Tools is scripting language for editing huge files. Files can also be
-edited interactively, producing a script of changes, which can later be
-executed on the original file to replay the same changes. The internal data
-structures are immutable and there is unlimited undo. Huge files are
-efficiently edited, even on machines with limited random access memory, by
+Transpose Tools is a scripting language with an interactive editor for
+modifying huge files. Interactive editing producing a script of changes, which
+can later be executed on the original file to replay the same modifications.
+That is, the interactive editing and scripting language are equivalent. The
+internal data structures are immutable and there is unlimited undo. Huge files
+are efficiently edited, even on machines with limited random access memory, by
 leveraging off the virtual memory mappings provide by x86-64 CPUs and modern
 kernels.
