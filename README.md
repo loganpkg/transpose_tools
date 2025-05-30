@@ -43,7 +43,9 @@ Beyond this, this projects uses the following assembly rules:
 * No 16-byte stack alignment is required (only 8-byte).
 * All registers are non-volatile (that is "callee-saved" or "call-preserved"),
     except for the register used to hold the return value.
-* Stack frames are always used, even in leaf functions.
+* Stack frames are always used, even in leaf functions (except for in the
+    `exit` function).
+
 
 
 
