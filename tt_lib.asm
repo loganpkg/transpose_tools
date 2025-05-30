@@ -27,13 +27,74 @@
 ; I can do all things through Christ who strengthens me.
 ;                                   Philippians 4:13 NKJV
 ;
+;
+; No system calls are allowed in this file. Assembly style is documented
+; in the README.md file.
+;
+
+
+%include "defs.inc"
+%include "sys.inc"
+
+
+section .text
+global str_len
+global print_str
 
 
 str_len:
-; Arg 1: rdi: String.
+;; Func: str_len: Returns the length of a string excluding the trailing zero.
+;; Arg 1: rdi: String.
+
+push rbp
+mov rbp, rsp
+
+xor rax, rax
+
+push rdi
+push r10
+
+.loop:
+    mov r10b, byte [rdi]
+    test r10b, r10b
+    jz .end
+
+    inc rdi
+    inc rax
+    jmp .loop
+
+.end:
+
+pop r10
+pop rdi
+
+mov rsp, rbp
+pop rbp
+ret
 
 
 
 
 print_str:
-; Arg 1: rdi: String.
+;; Func: print_str: Prints a string.
+;; Arg 1: rdi: File descriptor.
+;; Arg 2: rsi: String.
+
+push rbp
+mov rbp, rsp
+
+push rdx
+push rdi
+mov rdi, rsi
+call str_len
+mov rdx, rax
+pop rdi
+
+call write
+; Pass through error code in rax.
+
+pop rdx
+
+mov rsp, rbp
+pop rbp
+ret

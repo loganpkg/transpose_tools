@@ -1,0 +1,91 @@
+;
+; Copyright (c) 2025 Commonwealth of Australia
+;
+; Permission to use, copy, modify, and/or distribute this software for any
+; purpose with or without fee is hereby granted, provided that the above
+; copyright notice and this permission notice appear in all copies.
+;
+; THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+; WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+; MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+; ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+; WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+; ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+; OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+;
+
+
+;
+; Transpose Tools. Entry point to the scripting language interpreter and
+; interactive editor.
+;
+; Written by Logan Ryan McLintock.
+;
+
+
+%include "defs.inc"
+%include "sys.inc"
+%include "tt_lib.inc"
+
+
+section .data
+; Test.
+msg_str: db 'Hello world', 10, 0
+
+
+section .text
+
+global _start
+_start:
+
+%ifidn __OUTPUT_FORMAT__, win64
+    ; Setup normal stack frame.
+    push rbp
+    mov rbp, rsp
+%else
+    ; Deepest stack frame.
+    xor rbp, rbp
+%endif
+
+
+mov rdi, STD_OUT_FD
+mov rsi, msg_str
+call print_str
+test rax, rax
+jnz .error
+
+call print_str
+test rax, rax
+jnz .error
+
+call print_str
+test rax, rax
+jnz .error
+
+
+; Success.
+%ifidn __OUTPUT_FORMAT__, win64
+    xor rax, rax
+%else
+    xor rdi, rdi
+%endif
+
+
+.end:
+%ifidn __OUTPUT_FORMAT__, win64
+    ; Conclude normal stack frame.
+    mov rsp, rbp
+    pop rbp
+    ret
+%else
+    call exit
+%endif
+
+
+.error:
+%ifidn __OUTPUT_FORMAT__, win64
+    mov rax, ERROR
+%else
+    mov rdi, ERROR
+%endif
+jmp .end

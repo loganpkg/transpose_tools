@@ -1,0 +1,8 @@
+tt
+*.o
+*.obj
+*.exe
+*.pdb
+*.idx
+*.out
+*.run
